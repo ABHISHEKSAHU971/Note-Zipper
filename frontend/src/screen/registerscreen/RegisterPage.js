@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Mainscreen from "./../../component/Mainscreen";
-
+import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Row, Col, Container } from "react-bootstrap";
 
 import { Link } from "react-router-dom";
 import ErrorHandler from "../../component/Errorhandler/ErrorHandler";
-import axios from "axios";
+
 import LoaderSpinner from "./../../component/Spinner/Spinner";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Register } from "./../../Action/userAction";
 
 const Registerpage = () => {
   const [name, setName] = useState("");
@@ -17,8 +20,19 @@ const Registerpage = () => {
   const [pconfirm, setPconfirm] = useState("");
   const [pic, setPic] = useState(null);
   const [message, setMessage] = useState(null);
-  const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(false);
+
+  const dispatch = useDispatch();
+  const Navigate = useNavigate();
+
+  const userRegister = useSelector((state) => state.userRegister);
+  let { Loader, error, userInfo } = userRegister;
+
+  useEffect(() => {
+    userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      Navigate("/mynotes");
+    }
+  }, [userInfo, Navigate]);
 
   const ChangeHandler = async (e) => {
     e.preventDefault();
@@ -26,27 +40,7 @@ const Registerpage = () => {
     if (password !== pconfirm) {
       setMessage("Password do not Match");
     } else {
-      setMessage(null);
-      try {
-        setError(false);
-        setLoader(true);
-        const { data } = await axios.post(
-          "/user/useradd",
-          { name, email, password, pic },
-          {
-            headers: {
-              "Content-type": "Application/json",
-            },
-          }
-        );
-        console.log(data);
-        setLoader(false);
-        localStorage.setItem("userInfo", JSON.stringify(data));
-      } catch (error) {
-        setError(error.response.data.message);
-
-        setLoader(false);
-      }
+      dispatch(Register(name, email, password, pic));
     }
   };
 
@@ -54,7 +48,7 @@ const Registerpage = () => {
     <Mainscreen title="REGISTER">
       {error && <ErrorHandler variant="danger">{error}</ErrorHandler>}
       {message && <ErrorHandler variant="danger">{message}</ErrorHandler>}
-      {loader && <LoaderSpinner />}
+      {Loader && <LoaderSpinner />}
       <Container className="d-flex justify-content-center">
         <Form
           style={{ width: "400px" }}
@@ -105,7 +99,7 @@ const Registerpage = () => {
               Label="Upload Profile Picture"
               name="profile"
               custom
-              // onChange={(e) => setPic(e.target.value)}
+              onChange={(e) => setPic(e.target.value)}
             />
           </Form.Group>
 

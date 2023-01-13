@@ -19,14 +19,16 @@ const Loginpage = () => {
 
   const dispatch = useDispatch();
 
-  const userLogin = useSelector((state) => state.userLogin);
-  let { loader, error, userInfo } = userLogin;
-
   const SubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(email, password);
+    // console.log(email, password);
     dispatch(Login(email, password));
   };
+  const userLogin = useSelector((state) => state.userLogin);
+  let { Loader, error, userInfo } = userLogin;
+
+  console.log("userlogin", userLogin);
+  console.log("loader userlogin", Loader);
 
   useEffect(() => {
     userInfo = localStorage.getItem("userInfo");
@@ -38,7 +40,7 @@ const Loginpage = () => {
   return (
     <Mainscreen title="LOGIN">
       {error && <ErrorHandler variant="danger"> {error} </ErrorHandler>}
-      {loader && <LoaderSpinner />}
+      {Loader && <LoaderSpinner />}
       <Container className="d-flex justify-content-center">
         <Form style={{ width: "400px" }} onSubmit={SubmitHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">

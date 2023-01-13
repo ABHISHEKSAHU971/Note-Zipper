@@ -21,12 +21,13 @@ exports.userAdd = asyncHandler(async (req, res) => {
     name,
     email,
     password,
-    pic: {
-      data: fs.readFileSync(
-        path.join(__dirname, "../../uploads/" + req.file.filename)
-      ),
-      ContentType: "image/jpg",
-    },
+    pic,
+    // pic: {
+    //   data: fs.readFileSync(
+    //     path.join(__dirname, "../../uploads/" + req.file.filename)
+    //   ),
+    //   ContentType: "image/jpg",
+    // },
   });
   user.save();
   // let respond = await user.save();

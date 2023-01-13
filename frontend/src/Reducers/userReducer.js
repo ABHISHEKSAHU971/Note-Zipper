@@ -1,4 +1,9 @@
 import {
+  USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS,
+  USER_REGISTER_FAIL,
+} from "./../Constant/userConstant.js";
+import {
   USER_LOGIN_FAIL,
   USER_LOGIN_SUCCESS,
   USER_LOGOUT,
@@ -15,6 +20,20 @@ export const userLoginReducer = (state = {}, action) => {
       return { Loader: false, error: action.payload };
     case USER_LOGOUT:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const userRegsiterReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER_REGISTER_REQUEST:
+      return { Loader: true };
+    case USER_REGISTER_SUCCESS:
+      return { Loader: false, userInfo: action.payload };
+    case USER_REGISTER_FAIL:
+      return { Loader: false, error: action.payload };
+
     default:
       return state;
   }
