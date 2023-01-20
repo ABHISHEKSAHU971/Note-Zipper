@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const notes = require("../Data/Data");
 const userRouter = require("../routes/UserRouter");
+const noteRouter = require("../routes/noteRouter");
 const connectiondb = require("../congif/db");
 var cors = require("cors");
 const { userAdd } = require("../controllers/userController");
@@ -20,14 +21,15 @@ app.get("/", (req, res) => {
   res.send("Api running...");
 });
 
-app.get("/api/notes", (req, res) => {
-  res.json(notes);
-});
+// app.get("/api/notes", (req, res) => {
+//   res.json(notes);
+// });
 app.post("/api", (req, res) => {
   res.json(notes);
 });
 
 app.use("/user", userRouter);
+app.use("/notes", noteRouter);
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");

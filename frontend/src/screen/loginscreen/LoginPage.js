@@ -27,9 +27,6 @@ const Loginpage = () => {
   const userLogin = useSelector((state) => state.userLogin);
   let { Loader, error, userInfo } = userLogin;
 
-  console.log("userlogin", userLogin);
-  console.log("loader userlogin", Loader);
-
   useEffect(() => {
     userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
