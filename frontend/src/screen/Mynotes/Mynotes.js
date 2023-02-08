@@ -1,55 +1,77 @@
-import React, { useEffect, useState } from "react";
-import { Accordion, Badge, Button, Card, NavLink } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Accordion, Badge, Button, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Mainscreen from "./../../component/Mainscreen";
 
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ListNotes } from "./../../Action/noteAction";
+import { DeteleNotes, ListNotes } from "./../../Action/noteAction";
+import LoaderSpinner from "./../../component/Spinner/Spinner";
+import ErrorHandler from "./../../component/Errorhandler/ErrorHandler";
+import { useNavigate } from "react-router-dom";
 
-const Mynotes = () => {
+const Mynotes = ({ search }) => {
   const dispatch = useDispatch();
+  const Navigate = useNavigate();
 
   const Axios = axios.create({
     baseURL: "http://localhost:5000/",
     withCredentials: true,
   });
+
+  const userlogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userlogin;
+
+  const notecreate = useSelector((state) => state.notecreate);
+  const { success: successCreate } = notecreate;
+
+  const noteUpdate = useSelector((state) => state.noteUpdate);
+  const { success: successUpdate } = noteUpdate;
+
+  const nodeDelete = useSelector((state) => state.nodeDelete);
+  const {
+    Loader: LoadingDelete,
+    error: errorDetele,
+    success: successDetele,
+  } = nodeDelete;
+
   const deleteHandler = (id) => {
     if (window.confirm("Are You sure.?")) {
+      dispatch(DeteleNotes(id));
     }
   };
-
   useEffect(() => {
-    dispatch(ListNotes);
-    // fm();
-  }, [dispatch]);
-  // const fm = async () => {
-  //   // const config = {
-  //   //   headers: {
-  //   //     Authorization: `Bearer ${userInfo.token}`,
-  //   //   },
-  //   // };
+    dispatch(ListNotes());
+    if (!userInfo) {
+      Navigate("/");
+    }
+  }, [dispatch, successCreate, successUpdate, successDetele]);
 
-  //   const { data } = await axios.get("http://localhost:5000/notes", {
-  //     headers: {
-  //       "Content-type": "application/json",
-  //     },
-  //   });
-  //   console.log("data my notes", data);
-  // };
+  const notelist = useSelector((state) => state.noteList);
+  const { Loader, notes, error } = notelist;
 
-  const notelist = useSelector((state) => state.notelist);
-  console.log("notelist abhi", notelist);
-  // const { notes } = notelist;
-  const notes = [];
+  // console.log("notelist abhi", notelist);
+  // console.log("notelist abhi", notes);
 
   return (
-    <Mainscreen title="Welcome back Abhishek Sahu..">
-      <NavLink to="createnote">
+    <Mainscreen title={`Welcome back ${userInfo.name}..`}>
+      <Link to="/createnote">
         <Button style={{ fontSize: 18 }}>Create New Note</Button>
-
-        {notes?.map((note) => (
-          <Accordion key={`${note._id}`}>
+      </Link>
+      {errorDetele && (
+        <ErrorHandler variant="danger">{errorDetele}</ErrorHandler>
+      )}
+      {LoadingDelete && <LoaderSpinner />}
+      {error && <ErrorHandler variant="danger">{error}</ErrorHandler>}
+      {Loader && <LoaderSpinner />}
+      {notes
+        ?.reverse()
+        .filter((filterNote) =>
+          filterNote.title.toUpperCase().includes(search.toUpperCase())
+        )
+        .map((note) => (
+          <Accordion key={`${note._id}`} style={{ marginTop: 20 }}>
             <Accordion.Item eventKey="0">
               <Card style={{ margin: 10 }}>
                 <Card.Header style={{ display: "flex" }}>
@@ -85,7 +107,7 @@ const Mynotes = () => {
                       <blockquote className="blockquote mb-0">
                         <p>{note.content}</p>
                         <footer className="blockquote-footer">
-                          Created on - data
+                          Created on --{note.createdAt.substring(0, 10)}
                         </footer>
                       </blockquote>
                     </div>
@@ -95,7 +117,6 @@ const Mynotes = () => {
             </Accordion.Item>
           </Accordion>
         ))}
-      </NavLink>
     </Mainscreen>
   );
 };

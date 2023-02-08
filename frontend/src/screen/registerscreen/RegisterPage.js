@@ -99,7 +99,7 @@ const Registerpage = () => {
               Label="Upload Profile Picture"
               name="profile"
               custom
-              onChange={(e) => setPic(e.target.value)}
+              onChange={(e) => setPic(e.target.files[0].name)}
             />
           </Form.Group>
 

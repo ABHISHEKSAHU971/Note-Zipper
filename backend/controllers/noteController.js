@@ -31,6 +31,7 @@ exports.getNoteById = asyncHandler(async (req, res) => {
     res.status(404).json({ message: "Note Not Found" });
   }
 });
+
 exports.UpdateNote = asyncHandler(async (req, res) => {
   const { title, content, category } = req.body;
   const note = await Note.findById(req.params.id);

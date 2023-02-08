@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     pic: {
-      type: Buffer,
+      type: String,
       ContentType: String,
       required: false,
 
