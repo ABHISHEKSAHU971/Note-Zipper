@@ -11,6 +11,13 @@ const Header = ({ setSearch }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const changeroute = () => {
+    const userInfo = localStorage.getItem("userInfo");
+
+    if (userInfo) {
+      navigate("/mynotes");
+    }
+  };
   const LogoutHandler = () => {
     dispatch(Logout());
     navigate("/");
@@ -19,41 +26,65 @@ const Header = ({ setSearch }) => {
     <Navbar className=".pe-5" bg="primary" expand="lg" variant="dark">
       <Container fluid>
         <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav>
-            <Navbar.Brand href="/" className="">
+        <Navbar.Collapse
+          style={{ justifyContent: "spaceBetween" }}
+          id="navbarScroll"
+        >
+          <Nav
+            style={{
+              paddingLeft: "100px",
+              margin: "initial",
+              paddingRight: "100px",
+              cursor: "pointer",
+            }}
+          >
+            <Navbar.Brand onClick={changeroute} className="">
               NOTE ZIPPER
             </Navbar.Brand>
           </Nav>
-          <Nav>
-            <Form inline>
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </Form>
-          </Nav>
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: "100px" }}
-            navbarScroll
-          >
-            <Nav.Link href="/mynotes">My Notes</Nav.Link>
+          {userInfo ? (
+            <Nav>
+              <Form inline>
+                <Form.Control
+                  type="search"
+                  placeholder="Search"
+                  className="me-2"
+                  aria-label="Search"
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </Form>
+            </Nav>
+          ) : (
+            ""
+          )}
+          {userInfo ? (
+            <Nav
+              className="me-auto my-2 my-lg-0"
+              style={{ maxHeight: "100px" }}
+              navbarScroll
+            >
+              <Nav.Link href="/mynotes">My Notes</Nav.Link>
 
-            <NavDropdown title={userInfo.name} id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">My Profile</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={() => LogoutHandler()}>
-                logout
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
+              <NavDropdown title={userInfo.name} id="navbarScrollingDropdown">
+                <NavDropdown.Item href="/profile">My Profile</NavDropdown.Item>
+
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={() => LogoutHandler()}>
+                  logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          ) : (
+            <Nav
+              style={{
+                paddingRight: "100px",
+              }}
+            >
+              <Navbar.Brand href="/login" className="">
+                login
+              </Navbar.Brand>
+            </Nav>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

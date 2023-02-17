@@ -9,25 +9,19 @@ const path = require("path");
 const maxSize = 1 * 1000 * 1000;
 
 exports.userAdd = asyncHandler(async (req, res) => {
-  const { name, email, password, pic } = req.body;
+  const { name, email, password } = req.body;
 
   const UserExists = await User.findOne({ email });
   if (UserExists) {
     res.status(400);
     throw new Error("User Already Exists");
   }
+  console.log("useradd", req.file, req.body.pic, req.files, req.body);
 
   const user = await User.create({
     name,
     email,
     password,
-    pic,
-    // pic: {
-    //   data: fs.readFileSync(
-    //     path.join(__dirname, "../../uploads/" + req.file.filename)
-    //   ),
-    //   ContentType: "image/jpg",
-    // },
   });
   user.save();
   // let respond = await user.save();
@@ -64,5 +58,31 @@ exports.authUser = asyncHandler(async (req, res) => {
   } else {
     res.status(400);
     throw new Error("Invalid Email And Password");
+  }
+});
+
+exports.updateuser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  console.log("user", user._id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.pic = req.body.pic || user.pic;
+
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      pic: updatedUser.pic,
+      token: genrateWebToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
   }
 });

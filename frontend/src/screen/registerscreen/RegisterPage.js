@@ -34,12 +34,20 @@ const Registerpage = () => {
     }
   }, [userInfo, Navigate]);
 
+  const handleFileChange = (event) => {
+    setPic(event.target.files[0]);
+  };
+
   const ChangeHandler = async (e) => {
     e.preventDefault();
+
+    const pic = new FormData();
+    pic.append("photo", pic);
 
     if (password !== pconfirm) {
       setMessage("Password do not Match");
     } else {
+      console.log("pic", pic);
       dispatch(Register(name, email, password, pic));
     }
   };
@@ -57,6 +65,7 @@ const Registerpage = () => {
         >
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Name</Form.Label>
+            <span style={{ color: "red", marginLeft: "5px" }}>*</span>
             <Form.Control
               type="text"
               placeholder="Enter Name"
@@ -66,6 +75,7 @@ const Registerpage = () => {
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
+            <span style={{ color: "red", marginLeft: "5px" }}>*</span>
             <Form.Control
               type="email"
               placeholder="Enter email"
@@ -75,6 +85,7 @@ const Registerpage = () => {
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPssword">
             <Form.Label>Password</Form.Label>
+            <span style={{ color: "red", marginLeft: "5px" }}>*</span>
             <Form.Control
               type="password"
               placeholder="Enter Password"
@@ -84,6 +95,7 @@ const Registerpage = () => {
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Confirm Password</Form.Label>
+            <span style={{ color: "red", marginLeft: "5px" }}>*</span>
             <Form.Control
               type="password"
               placeholder="Confirm Password"
@@ -98,8 +110,8 @@ const Registerpage = () => {
               type="file"
               Label="Upload Profile Picture"
               name="profile"
-              custom
-              onChange={(e) => setPic(e.target.files[0].name)}
+              onChange={handleFileChange}
+              // defaultValue={this.state.selectedFile}
             />
           </Form.Group>
 

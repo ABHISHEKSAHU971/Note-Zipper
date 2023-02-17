@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema(
     },
     pic: {
       type: String,
-      ContentType: String,
       required: false,
 
       default:

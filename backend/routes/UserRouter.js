@@ -1,12 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { userAdd, authUser } = require("../controllers/userController");
+const {
+  userAdd,
+  authUser,
+  updateuser,
+} = require("../controllers/userController");
 const multer = require("multer");
+const { protect } = require("../middlewares/authmiddleware");
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Uploads is the Upload_folder_name
-    cb(null, "uploads");
+    cb(null, "./Myuploads");
   },
   filename: (req, file, cb) => {
     const uniq =
@@ -32,5 +37,6 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.post("/useradd", upload.single("profile"), userAdd);
 router.post("/login", authUser);
+router.post("/profile", upload.single("profile"), protect, updateuser);
 
 module.exports = router;

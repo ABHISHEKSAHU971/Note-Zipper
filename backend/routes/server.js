@@ -6,6 +6,8 @@ const noteRouter = require("../routes/noteRouter");
 const connectiondb = require("../congif/db");
 var cors = require("cors");
 const { userAdd } = require("../controllers/userController");
+const { patch } = require("../routes/UserRouter");
+const path = require("path");
 
 const PORT = process.env.PORT || 5000;
 
@@ -17,10 +19,6 @@ connectiondb();
 
 dotenv.config();
 
-app.get("/", (req, res) => {
-  res.send("Api running...");
-});
-
 // app.get("/api/notes", (req, res) => {
 //   res.json(notes);
 // });
@@ -30,6 +28,18 @@ app.post("/api", (req, res) => {
 
 app.use("/user", userRouter);
 app.use("/notes", noteRouter);
+
+__dirname = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Api running...");
+  });
+}
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");

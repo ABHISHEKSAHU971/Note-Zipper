@@ -55,7 +55,7 @@ const Mynotes = ({ search }) => {
   // console.log("notelist abhi", notes);
 
   return (
-    <Mainscreen title={`Welcome back ${userInfo.name}..`}>
+    <Mainscreen title={`Welcome Back ${userInfo.name.toUpperCase()}..`}>
       <Link to="/createnote">
         <Button style={{ fontSize: 18 }}>Create New Note</Button>
       </Link>

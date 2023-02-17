@@ -5,15 +5,15 @@ import "./Landingpage.css";
 import { useNavigate } from "react-router-dom";
 
 const Landingpage = () => {
-  // const navigate = useNavigate;
+  const navigate = useNavigate;
 
-  // useEffect(() => {
-  //   const userInfo = localStorage.getItem("userInfo");
-  //   console.log(userInfo);
-  //   if (userInfo) {
-  //     navigate("/mynotes");
-  //   }
-  // }, []);
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    console.log(userInfo);
+    if (userInfo) {
+      navigate("/mynotes");
+    }
+  }, []);
   return (
     <div className="main">
       <Container>
