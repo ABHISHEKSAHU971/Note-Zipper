@@ -11,13 +11,6 @@ const Header = ({ setSearch }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const changeroute = () => {
-    const userInfo = localStorage.getItem("userInfo");
-
-    if (userInfo) {
-      navigate("/mynotes");
-    }
-  };
   const LogoutHandler = () => {
     dispatch(Logout());
     navigate("/");
@@ -38,9 +31,7 @@ const Header = ({ setSearch }) => {
               cursor: "pointer",
             }}
           >
-            <Navbar.Brand onClick={changeroute} className="">
-              NOTE ZIPPER
-            </Navbar.Brand>
+            <Navbar.Brand className="">NOTE ZIPPER</Navbar.Brand>
           </Nav>
           {userInfo ? (
             <Nav>
