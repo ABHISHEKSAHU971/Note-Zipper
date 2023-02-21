@@ -17,7 +17,7 @@ export const Login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
     const { data } = await axios.post(
-      "https://notezipperapi.onrender.com/user/login",
+      "/user/login",
       {
         email,
         password,
