@@ -29,22 +29,26 @@ app.post("/api", (req, res) => {
 app.use("/user", userRouter);
 app.use("/notes", noteRouter);
 
-__dirname = path.resolve();
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/build")));
-  app.get("*", (req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, "frontend", "build", "index.html"),
-      function (err) {
-        res.status(500).send(err);
-      }
-    );
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("Api running...");
-  });
-}
+app.get("/", (req, res) => {
+  res.send("Api running...");
+});
+
+// __dirname = path.resolve();
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "/frontend/build")));
+//   app.get("*", (req, res) => {
+//     res.sendFile(
+//       path.resolve(__dirname, "frontend", "build", "index.html"),
+//       function (err) {
+//         res.status(500).send(err);
+//       }
+//     );
+//   });
+// } else {
+//   app.get("/", (req, res) => {
+//     res.send("Api running...");
+//   });
+// }
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");
