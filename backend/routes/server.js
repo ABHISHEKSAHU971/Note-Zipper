@@ -20,9 +20,8 @@ app.use(
 
 connectiondb();
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(app, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.end("Hello World!");
 });
 
 dotenv.config();
