@@ -8,6 +8,7 @@ var cors = require("cors");
 const { userAdd } = require("../controllers/userController");
 const { patch } = require("../routes/UserRouter");
 const path = require("path");
+const http = require("http");
 
 const PORT = process.env.PORT || 5000;
 
@@ -18,6 +19,11 @@ app.use(
 );
 
 connectiondb();
+
+const server = http.createServer((req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.end("Hello World!");
+});
 
 dotenv.config();
 
@@ -68,4 +74,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, console.log(`server Started to port ${PORT} `));
+server.listen(PORT, console.log(`server Started to port ${PORT} `));
