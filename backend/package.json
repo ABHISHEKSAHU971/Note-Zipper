@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon routes/server.js",
+    "start": "node routes/server.js",
     "build":"npm i",
     "client": "npm start --prefix frontend",
     "server": "nodemon backend/server",
