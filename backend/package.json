@@ -2,6 +2,7 @@
   "name": "note-zipper",
   "version": "1.0.0",
   "description": "",
+  "proxy": "https://master--funny-frangipane-e0b58e.netlify.app",
   "main": "index.js",
   "scripts": {
     "start": "nodemon routes/server.js",
